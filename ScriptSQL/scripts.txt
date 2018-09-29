@@ -1,0 +1,142 @@
+create table setor(
+id serial primary key,
+nome varchar(50) unique not null);
+
+create table status(
+id serial primary key,
+descricao varchar(50) unique not null);
+
+create table condicaoveiculo(
+id serial primary key,
+descricao varchar(20) unique not null);
+
+create table estado(
+id serial primary key,
+nomeestado varchar(40) unique not null,
+uf varchar(2) unique not null);
+
+create table veiculo(
+id serial primary key, 
+chassi varchar(20) not null unique,
+modelo varchar(40) not null,
+versao varchar(40) not null,
+anomodelo int not null,
+anofabricacao int not null,
+placa varchar(8) not null unique,
+kminicial numeric(16,2) not null,
+kmfinal numeric(16,2) not null,
+nomefoto varchar(100),
+caminhofoto varchar(100));
+
+create table usuario(
+id serial primary key,
+nome varchar(50) not null,
+sobrenome varchar(50) not null,
+datanascimento date not null,
+cpf varchar(14) unique,
+telefone varchar(14) not null,
+cnh varchar(30) not null,
+senha varchar(20) not null,
+endereco varchar(80) not null,
+cidade varchar(80) not null,
+idestado int not null,
+email varchar(100) unique,
+foreign key (idestado) references estado(id));
+
+create table gerente(
+id serial primary key,
+idsetor int not null,
+idusuario int not null,
+foreign key (idsetor) references setor(id),
+foreign key (idusuario) references usuario(id));
+
+create table colaborador(
+id serial primary key,
+idsetor int not null,
+idgerente int not null,
+idusuario int not null,
+foreign key (idsetor) references setor(id),
+foreign key (idgerente) references gerente(id),
+foreign key (idusuario) references usuario(id));
+
+create table cliente(
+id serial primary key,
+idusuario int not null,
+foreign key (idusuario) references usuario(id));
+
+create table reserva(
+id serial primary key,
+idveiculo int not null,
+datasaidaprev date not null,
+horasaidaprev time,
+dataretprev date,
+horaretprev time,
+datasaida date,
+horasaida date,
+kminicial numeric(16,2) not null,
+dataretorno date,
+horaretorno time,
+kmfinal numeric(16,2) not null,
+observacao varchar(200),
+idcondicao int not null,
+idstatus int not null,
+motivo varchar(100) not null,
+destino varchar(100) not null,
+foreign key (idveiculo) references veiculo(id),
+foreign key (idcondicao) references condicaoveiculo(id),
+foreign key (idstatus) references status(id));
+
+create table reservacliente(
+id serial primary key,
+idcliente int not null,
+idcolaborador int not null,
+foreign key (idcliente) references cliente(id),
+foreign key (idcolaborador) references colaborador(id));
+
+
+create table reservacolaborador(
+id serial primary key,
+idcolaborador int not null,
+foreign key (idcolaborador) references colaborador(id));
+
+--insert setor
+insert into setor(nome) values ('Vendas');
+insert into setor(nome) values ('Recursos Humanos');
+
+--insert status
+insert into status(descricao) values ('RESERVADO');
+insert into status(descricao) values ('CANCELADO');
+insert into status(descricao) values ('ATIVADO');
+
+--insert condicaoveiculo
+insert into condicaoveiculo(descricao) values ('OK');
+insert into condicaoveiculo(descricao) values ('AVARIADO');
+
+--insert estado
+insert into estado(nomeestado, uf) values ('Acre', 'AC');
+insert into estado(nomeestado, uf) values ('Alagoas', 'AL');
+insert into estado(nomeestado, uf) values ('Amapá', 'AP');
+insert into estado(nomeestado, uf) values ('Amazonas', 'AM');
+insert into estado(nomeestado, uf) values ('Bahia', 'BA');
+insert into estado(nomeestado, uf) values ('Ceará', 'CE');
+insert into estado(nomeestado, uf) values ('Distrito Federal', 'DF');
+insert into estado(nomeestado, uf) values ('Espirito Santo', 'ES');
+insert into estado(nomeestado, uf) values ('Goiás', 'GO');
+insert into estado(nomeestado, uf) values ('Maranhão', 'MA');
+insert into estado(nomeestado, uf) values ('Mato Grosso', 'MT');
+insert into estado(nomeestado, uf) values ('Mato Grosso do Sul', 'MS');
+insert into estado(nomeestado, uf) values ('Minas Gerais', 'MG');
+insert into estado(nomeestado, uf) values ('Pará', 'PA');
+insert into estado(nomeestado, uf) values ('Paraíba', 'PB');
+insert into estado(nomeestado, uf) values ('Paraná', 'PR');
+insert into estado(nomeestado, uf) values ('Pernambuco', 'PE');
+insert into estado(nomeestado, uf) values ('Piauí', 'PI');
+insert into estado(nomeestado, uf) values ('Rio de Janeiro', 'RJ');
+insert into estado(nomeestado, uf) values ('Rio Grando do Norte', 'RN');
+insert into estado(nomeestado, uf) values ('Rio Grande do Sul', 'RS');
+insert into estado(nomeestado, uf) values ('Rondônia', 'RO');
+insert into estado(nomeestado, uf) values ('Roraima', 'RR');
+insert into estado(nomeestado, uf) values ('Santa Catarina', 'SC');
+insert into estado(nomeestado, uf) values ('São Paulo', 'SP');
+insert into estado(nomeestado, uf) values ('Sergipe', 'SE');
+insert into estado(nomeestado, uf) values ('Tocantis', 'TO');
